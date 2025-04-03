@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=1,2,3,5
+export CUDA_VISIBLE_DEVICES=0,4,6,7
 
 policy_path=Qwen/Qwen2.5-Math-1.5B
 rollout_batch_size=128
@@ -13,7 +13,7 @@ entropy_coeff=0
 max_gen_length=3072
 numcall=1
 dataset_name=math_hard
-run_name=rl.grpo_qwen.math.1.5b_${dataset_name}_numcall${numcall}
+run_name=rl.grpo_qwen.math.1.5b_${dataset_name}_numcall${numcall}_new
 data_path=./data/${dataset_name}
 samples_save_path=./data/samples/$run_name
 
@@ -57,7 +57,7 @@ python3 -m verl.trainer.main_ppo \
     trainer.nnodes=1 \
     trainer.save_freq=10 \
     trainer.test_freq=5 \
-    trainer.default_local_dir=path_to_save/${run_name} \
+    trainer.default_local_dir=verl_checkpoints/${run_name} \
     trainer.resume_mode=auto \
     trainer.samples_save_path=$samples_save_path \
     trainer.total_epochs=$episode $@

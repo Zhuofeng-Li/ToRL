@@ -175,3 +175,10 @@ yarl==1.18.3
 zipp==3.21.0
 flash_attn==2.7.4.post1
 torchdata
+hydra-core==1.4.0.dev1
+jsonlines
+math-verify
+qwen-agent
+qwen-agent[python_interpreter]
+sortedcontainers
+wandb

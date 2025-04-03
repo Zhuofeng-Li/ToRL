@@ -106,11 +106,10 @@ def _detect_tool(text: str) -> Tuple[bool, str, str, str]:
 
 def send_request(json_data):
     try:
-        url = 'http://0.0.0.0:8080'
+        url = 'http://0.0.0.0:8080/run_code'
         response = requests.post(url, json=json_data, timeout=10)
         return response.json()  # 返回响应的 JSON 数据
     except:
-        print("sanbox timeout")
         return {"error": "unknown"}
 
 
@@ -230,7 +229,7 @@ class vLLMRollout(BaseRollout):
                     return output['run_result']['stdout'], "Done"
                 else:
                     return output['run_result']['stdout'], output['run_result']['stderr'].strip()
-            except Exception: # TODO: debug here print exception
+            except Exception: 
                 return "Error", "UnknownError"
         results=[postproc(result) for result in results]
         return results
