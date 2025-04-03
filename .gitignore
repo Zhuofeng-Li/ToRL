@@ -128,6 +128,5 @@ temp_verl_results/
 *.log
 search_r1/search/retrieval_request.py
 tmp.*
-*.sh
 *.ipynb
 path_to_save
