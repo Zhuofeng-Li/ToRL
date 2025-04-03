@@ -1,3 +1,5 @@
+export CUDA_VISIBLE_DEVICES=1,2,3,5
+
 policy_path=Qwen/Qwen2.5-Math-1.5B
 rollout_batch_size=128
 n_samples_per_prompts=16
@@ -12,8 +14,8 @@ max_gen_length=3072
 numcall=1
 dataset_name=torl_data
 run_name=rl.grpo_qwen.math.1.5b_${dataset_name}_numcall${numcall}
-data_path=../data/${dataset_name}
-samples_save_path=../data/samples/$run_name
+data_path=./data/${dataset_name}
+samples_save_path=./data/samples/$run_name
 
 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
@@ -51,10 +53,10 @@ python3 -m verl.trainer.main_ppo \
     trainer.logger=['console','wandb'] \
     trainer.project_name=torl \
     trainer.experiment_name=${run_name} \
-    trainer.n_gpus_per_node=8 \
+    trainer.n_gpus_per_node=4 \
     trainer.nnodes=1 \
-    trainer.save_freq=20 \
-    trainer.test_freq=4 \
+    trainer.save_freq=10 \
+    trainer.test_freq=5 \
     trainer.default_local_dir=path_to_save/${run_name} \
     trainer.resume_mode=auto \
     trainer.samples_save_path=$samples_save_path \
