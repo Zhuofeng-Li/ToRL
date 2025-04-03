@@ -1,5 +1,6 @@
 export CUDA_VISIBLE_DEVICES=1,2,3,5
 
+
 policy_path=Qwen/Qwen2.5-Math-1.5B
 rollout_batch_size=128
 n_samples_per_prompts=16
