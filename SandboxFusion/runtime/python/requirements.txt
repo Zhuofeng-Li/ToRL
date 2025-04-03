@@ -1,0 +1,14 @@
+numpy
+scipy
+sympy
+scikit-learn
+statsmodels
+cvxpy
+networkx
+mpmath
+numexpr
+bottleneck
+gmpy2
+shapely
+matplotlib
+pandas

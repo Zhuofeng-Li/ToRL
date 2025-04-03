@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=1,2,3,5
+export CUDA_VISIBLE_DEVICES=4,6
 
 
 policy_path=Qwen/Qwen2.5-Math-1.5B

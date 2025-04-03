@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=0,4,6,7
+export CUDA_VISIBLE_DEVICES=4,6
 
 policy_path=Qwen/Qwen2.5-Math-1.5B
 rollout_batch_size=128
@@ -53,7 +53,7 @@ python3 -m verl.trainer.main_ppo \
     trainer.logger=['console','wandb'] \
     trainer.project_name=torl \
     trainer.experiment_name=${run_name} \
-    trainer.n_gpus_per_node=4 \
+    trainer.n_gpus_per_node=2 \
     trainer.nnodes=1 \
     trainer.save_freq=10 \
     trainer.test_freq=5 \
