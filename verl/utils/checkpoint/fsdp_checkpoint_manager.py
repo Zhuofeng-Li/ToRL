@@ -20,7 +20,7 @@ from typing import Union
 import torch
 import torch.distributed
 from torch.distributed.fsdp import FullyShardedDataParallel as FSDP, StateDictType
-from torch.distributed.fsdp import ShardedStateDictConfig, ShardedOptimStateDictConfig
+from torch.distributed.fsdp import ShardedStateDictConfig, ShardedOptimStateDictConfig, FullStateDictConfig
 
 from verl.utils.fs import copy_to_local, is_non_local
 
@@ -73,9 +73,9 @@ class FSDPCheckpointManager(BaseCheckpointManager):
         local_optim_path = copy_to_local(remote_optim_path)
         local_extra_state_path = copy_to_local(remote_extra_state_path)
 
-        model_state_dict = torch.load(local_model_path)
-        optimizer_state_dict = torch.load(local_optim_path)
-        extra_state_dict = torch.load(local_extra_state_path)
+        model_state_dict = torch.load(local_model_path, weights_only=False)
+        optimizer_state_dict = torch.load(local_optim_path, weights_only=False)
+        extra_state_dict = torch.load(local_extra_state_path, weights_only=False)
 
         if del_local_after_load:
             try:
@@ -144,6 +144,8 @@ class FSDPCheckpointManager(BaseCheckpointManager):
                 torch.save(model_state_dict, model_path)
                 torch.save(optimizer_state_dict, optim_path)  # TODO: address optimizer is None
                 torch.save(extra_state_dict, extra_path)
+        with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT, FullStateDictConfig(offload_to_cpu=True, rank0_only=True)):
+            full_state_dict = self.model.state_dict()
 
         # wait for everyone to dump to local
         torch.distributed.barrier()
@@ -153,6 +155,7 @@ class FSDPCheckpointManager(BaseCheckpointManager):
             os.makedirs(hf_local_path, exist_ok=True)
             self.model._fsdp_wrapped_module.config.save_pretrained(hf_local_path)
             self.processing_class.save_pretrained(hf_local_path)
+            self.model.save_pretrained(hf_local_path, state_dict=full_state_dict)
 
         torch.distributed.barrier()
 

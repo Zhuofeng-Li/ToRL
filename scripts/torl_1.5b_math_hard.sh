@@ -1,4 +1,4 @@
-export CUDA_VISIBLE_DEVICES=4,6
+export CUDA_VISIBLE_DEVICES=0,1
 
 policy_path=Qwen/Qwen2.5-Math-1.5B
 rollout_batch_size=128
@@ -23,7 +23,7 @@ python3 -m verl.trainer.main_ppo \
     data.val_files=$data_path/test.parquet \
     data.train_batch_size=$rollout_batch_size \
     data.val_batch_size=2048 \
-    data.max_prompt_length=400 \
+    data.max_prompt_length=1024 \
     data.max_response_length=$max_gen_length \
     data.template_type=tir_base_0309 \
     actor_rollout_ref.model.path=$policy_path \
@@ -59,5 +59,6 @@ python3 -m verl.trainer.main_ppo \
     trainer.test_freq=5 \
     trainer.default_local_dir=verl_checkpoints/${run_name} \
     trainer.resume_mode=auto \
+    trainer.resume_from_path=True \
     trainer.samples_save_path=$samples_save_path \
     trainer.total_epochs=$episode $@
