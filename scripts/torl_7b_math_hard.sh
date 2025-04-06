@@ -1,6 +1,6 @@
-export CUDA_VISIBLE_DEVICES=0,1
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
-policy_path=Qwen/Qwen2.5-Math-1.5B
+policy_path=Qwen/Qwen2.5-Math-7B
 rollout_batch_size=128
 n_samples_per_prompts=16
 episode=300
@@ -11,10 +11,10 @@ kl_loss_coef=0.0
 kl_coef=0.0
 entropy_coeff=0
 max_gen_length=3072
-url=http://0.0.0.0:8080/run_code
 numcall=1
+url=http://0.0.0.0:8080/run_code
 dataset_name=math_hard
-run_name=rl.grpo_qwen.math.1.5b_${dataset_name}_numcall${numcall}_new
+run_name=rl.grpo_qwen.math.7b_${dataset_name}_numcall${numcall}_new
 data_path=./data/${dataset_name}
 samples_save_path=./data/samples/$run_name
 
@@ -55,7 +55,7 @@ python3 -m verl.trainer.main_ppo \
     trainer.logger=['console','wandb'] \
     trainer.project_name=torl \
     trainer.experiment_name=${run_name} \
-    trainer.n_gpus_per_node=2 \
+    trainer.n_gpus_per_node=4 \
     trainer.nnodes=1 \
     trainer.save_freq=10 \
     trainer.test_freq=5 \

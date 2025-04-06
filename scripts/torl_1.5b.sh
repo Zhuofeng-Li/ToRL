@@ -13,6 +13,7 @@ kl_coef=0.0
 entropy_coeff=0
 max_gen_length=3072
 numcall=1
+url=http://0.0.0.0:8080/run_code
 dataset_name=torl_data
 run_name=rl.grpo_qwen.math.1.5b_${dataset_name}_numcall${numcall}
 data_path=./data/${dataset_name}
@@ -42,6 +43,7 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.tensor_model_parallel_size=1 \
     actor_rollout_ref.rollout.name=vllm \
     actor_rollout_ref.rollout.num_llm_calls_available=$numcall \
+    +actor_rollout_ref.rollout.url=$url \
     actor_rollout_ref.rollout.temperature=$temperature \
     actor_rollout_ref.rollout.top_p=1.0 \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.85 \

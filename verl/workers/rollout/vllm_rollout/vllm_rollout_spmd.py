@@ -104,9 +104,9 @@ def _detect_tool(text: str) -> Tuple[bool, str, str, str]:
         program = json.dumps({'code': program}, ensure_ascii=False)
     return (program != ''), PythonExecutor.name, program, text
 
-def send_request(json_data):
+def send_request(json_data, url):
     try:
-        url = 'http://0.0.0.0:8080/run_code'
+        # url = 'http://0.0.0.0:8080/run_code'
         response = requests.post(url, json=json_data, timeout=10)
         return response.json()  # 返回响应的 JSON 数据
     except:
@@ -214,7 +214,7 @@ class vLLMRollout(BaseRollout):
         tool_inputs=[{'code': tool_input,'language': 'python'} for tool_input in tool_inputs]
         results = [None] * len(tool_inputs) 
         with ThreadPoolExecutor(max_workers=max(min(len(tool_inputs), os.cpu_count(), 64), 1)) as executor:
-            future_to_index = {executor.submit(send_request, input): i for i, input in enumerate(tool_inputs)}
+            future_to_index = {executor.submit(send_request, input, self.config.url): i for i, input in enumerate(tool_inputs)}
             for future in as_completed(future_to_index):
                 index = future_to_index[future]
                 try:
