@@ -14,7 +14,7 @@
 # from . import gsm8k, math, prime_math, prime_code
 
 
-def _default_compute_score(data_source, solution_str, ground_truth, extra_info=None, reward_type=None):
+def _default_compute_score(data_source, solution_str, ground_truth, extra_info=None, reward_type=None, question=None):
     if data_source == 'openai/gsm8k':
         from . import gsm8k
         res = gsm8k.compute_score(solution_str, ground_truth)
@@ -33,6 +33,9 @@ def _default_compute_score(data_source, solution_str, ground_truth, extra_info=N
     elif data_source in ['hiyouga/geometry3k']:
         from . import geo3k
         res = geo3k.compute_score(solution_str, ground_truth)
+    elif data_source in ['gpqa']:
+        from . import model_verifier
+        res = model_verifier.compute_score(question, solution_str, ground_truth)
     else:
         from . import math_verifier
         res = math_verifier.compute_score(solution_str, ground_truth, reward_type)

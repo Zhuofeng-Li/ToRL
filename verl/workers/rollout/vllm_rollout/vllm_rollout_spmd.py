@@ -106,7 +106,7 @@ def _detect_tool(text: str) -> Tuple[bool, str, str, str]:
 
 def send_request(json_data, url):
     try:
-        # url = 'http://0.0.0.0:8080/run_code'
+        url = 'http://0.0.0.0:8080/run_code'
         response = requests.post(url, json=json_data, timeout=10)
         return response.json()  # 返回响应的 JSON 数据
     except:
@@ -163,6 +163,7 @@ class vLLMRollout(BaseRollout):
             max_num_batched_tokens=max_num_batched_tokens,
             enable_chunked_prefill=config.enable_chunked_prefill,
             enable_prefix_caching=True,
+            seed=42,
         )
 
         # Offload vllm model to reduce peak memory usage
@@ -188,7 +189,7 @@ class vLLMRollout(BaseRollout):
         
         self.pad_token_id = tokenizer.pad_token_id
         self.tokenizer = tokenizer
-        self.executor=PythonExecutor()
+        # self.executor=PythonExecutor()
         # self.code_interpreter=CodeInterpreter()
     
     def _get_prompts_and_indices(self, samples_info):
@@ -213,7 +214,7 @@ class vLLMRollout(BaseRollout):
     def code_interpreter_batch_call(self, tool_inputs, timeout=20):
         tool_inputs=[{'code': tool_input,'language': 'python'} for tool_input in tool_inputs]
         results = [None] * len(tool_inputs) 
-        with ThreadPoolExecutor(max_workers=max(min(len(tool_inputs), os.cpu_count(), 64), 1)) as executor:
+        with ThreadPoolExecutor(max_workers=max(min(len(tool_inputs), os.cpu_count(), 16), 1)) as executor:
             future_to_index = {executor.submit(send_request, input, self.config.url): i for i, input in enumerate(tool_inputs)}
             for future in as_completed(future_to_index):
                 index = future_to_index[future]

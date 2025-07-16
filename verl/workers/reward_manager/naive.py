@@ -67,7 +67,8 @@ class NaiveRewardManager:
                 solution_str=response_str,
                 ground_truth=ground_truth,
                 extra_info=extra_info,
-                reward_type=self.config.data.reward_type
+                reward_type=self.config.data.reward_type,
+                question=prompt_str
             )
             if self.config.data.execution_error_penalty and data_item.batch['execution_passes'].item()==0:
                 score-=0.5

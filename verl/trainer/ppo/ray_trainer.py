@@ -709,7 +709,7 @@ class RayPPOTrainer(object):
         return metric_dict
     
     def _save_samples(self, batch: DataProto, split: str):
-        prompts, response, token_level_scores=batch.batch['prompts'], batch.batch['responses'], batch.batch['token_level_scores']
+        prompts, response, token_level_scores, rm = batch.batch['prompts'], batch.batch['responses'], batch.batch['token_level_scores'], batch.non_tensor_batch['reward_model']
         sources=batch.non_tensor_batch['data_source']
         prompts=self.tokenizer.batch_decode(prompts, skip_special_tokens=True)
         response=self.tokenizer.batch_decode(response, skip_special_tokens=True)
@@ -723,8 +723,9 @@ class RayPPOTrainer(object):
             data.append({
                 'prompt': prompts[idx],
                 'response': response[idx],
+                'ground_truth': rm[idx]['ground_truth'],
                 'reward': rewards[idx],
-                'source': sources[idx],
+                'source': sources[idx], 
             })
         os.makedirs(os.path.join(self.config.trainer.samples_save_path, split), exist_ok=True)
         with open(os.path.join(self.config.trainer.samples_save_path, split, f"step_{self.global_steps}.json"), 'a+', encoding='utf-8') as f:

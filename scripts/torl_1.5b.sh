@@ -1,4 +1,5 @@
-export CUDA_VISIBLE_DEVICES=3,4
+export WANDB_API_KEY=206bfb00f2ea3ace5584800c219dfc894e981bc3
+export CUDA_VISIBLE_DEVICES=6,7
 
 
 policy_path=Qwen/Qwen2.5-Math-1.5B

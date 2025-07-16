@@ -98,6 +98,8 @@ def main_task(config, compute_score=None):
             from verl.workers.fsdp_workers import RewardModelWorker
         elif config.reward_model.strategy == 'megatron':
             from verl.workers.megatron_workers import RewardModelWorker
+        elif config.reward_model.strategy == 'verifier':
+            from verl.workers.reward_model.verifier import RewardModelWorker
         else:
             raise NotImplementedError
         role_worker_mapping[Role.RewardModel] = ray.remote(RewardModelWorker)
