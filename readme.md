@@ -7,3 +7,10 @@ uv pip install flash-attn==2.7.4.post1  --no-build-isolation
 cd octotools
 uv pip install -e .
 ```
+
+```python
+git submodule update --init --recursive
+cd octotools
+uv pip install -e .
+# set .env 
+```
