@@ -44,8 +44,6 @@ from vllm.distributed import parallel_state as vllm_ps
 from vllm import LLM, SamplingParams
 from verl.third_party.vllm import vllm_version
 from qwen_agent.tools.python_executor import PythonExecutor
-from qwen_agent.tools.code_interpreter import CodeInterpreter
-from qwen_agent.utils.utils import print_traceback
 from typing import Tuple
 import json5
 import pdb
@@ -56,6 +54,16 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 # 1. support pp in vllm
 # 2. passing tokenizer is not necessary? no encoding/decoding is happending here
 # 3. simplify init logics
+
+import re
+
+CONTROL_CHAR_RE = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F]')
+UNICODE_INVALID_RE = re.compile(r'[\u2028\u2029\u200B\uFEFF]')
+
+def sanitize_json_string(s):
+    s = CONTROL_CHAR_RE.sub('', s)
+    s = UNICODE_INVALID_RE.sub('', s)
+    return s
 
 
 # NOTE(sgm): add for verl. We can optimize it by making the dataloader yield List[int] without padding.
@@ -327,7 +335,7 @@ class vLLMRollout(BaseRollout):
             # execute python code
 
             # observations=self.executor.batch_apply([json5.loads(x)['code'] for x in tool_inputs])
-            observations=self.code_interpreter_batch_call([json5.loads(x)['code'] for x in tool_inputs])
+            observations=self.code_interpreter_batch_call([json5.loads(sanitize_json_string(x))['code'] for x in tool_inputs])
             
             # construction responses from observations
             responses=[response+"\n" if not response.endswith('\n') else response for response in responses]

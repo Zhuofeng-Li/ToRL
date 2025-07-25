@@ -63,6 +63,7 @@ def correctness_score_default(response, gt):
     matches = boxed_pattern.findall(response)
     if not matches: return -1.0
     pred = matches[-1][:-1]
+    gt = str(gt)
     return 1.0 if is_equiv(pred, gt) else -1.0
 
 

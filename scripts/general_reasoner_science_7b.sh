@@ -19,7 +19,7 @@ entropy_coeff=0
 max_gen_length=3072
 numcall=1
 url=http://0.0.0.0:8080/run_code
-run_name=rl.grpo_torl.math.1.5b_${dataset_name}_numcall${numcall}
+run_name=rl.grpo_torl.math.7b_${dataset_name}_numcall${numcall}_new
 samples_save_path=./data/samples/$run_name
 
 python3 -m verl.trainer.main_ppo \
@@ -67,9 +67,10 @@ python3 -m verl.trainer.main_ppo \
     trainer.experiment_name=${run_name} \
     trainer.n_gpus_per_node=8 \
     trainer.nnodes=1 \
-    trainer.save_freq=10 \
+    trainer.save_freq=5 \
     trainer.test_freq=5 \
     trainer.default_local_dir=verl_checkpoints/${run_name} \
     trainer.resume_mode=auto \
+    trainer.resume_from_path=True \
     trainer.samples_save_path=$samples_save_path \
     trainer.total_epochs=$episode $@

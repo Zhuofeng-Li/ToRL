@@ -24,6 +24,7 @@ fastapi
 latex2sympy2_extended
 math_verify
 vllm>=0.7.3,<=0.8.5
+setuptools
 
 
 

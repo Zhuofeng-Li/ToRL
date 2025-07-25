@@ -19,8 +19,8 @@ from octotools.engine.openai import ChatOpenAI
 
 llm_engine = ChatOpenAI(model="gpt-4o", enable_cache=True)
 
+# TODO: use analysis latter
 class AnswerVerification(BaseModel):
-    analysis: str
     true_false: bool
 
 def compute_score(question, response, correct_answer) -> float:      
@@ -41,15 +41,16 @@ Model response: {response}
 Correct answer: {correct_answer}
 
 Response Format:
-<analysis>: Extract the core answer and explain exact match comparison
 <true_false>: Return "True" only for exact matches, otherwise "False"
     """
 
-    verification = llm_engine(query_prompt, response_format=AnswerVerification)
+	# TODO: update
+    verification = llm_engine(query_prompt, response_format=AnswerVerification, max_tokens=16000)
 
     true_false = verification.true_false
 
     return 1.0 if true_false else 0.0
+    # return 1.0
 
 
 if __name__ == "__main__":
