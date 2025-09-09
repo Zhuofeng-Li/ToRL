@@ -1,3 +1,7 @@
+## Summary
++ It supports math (deepmath) or science (general-reasoner) tasks Python-use LLM RL Training.
++ It realizes LLL-as-Judge for GPQA-D evaluation during training.
+
 ## Env Set Up
 ```python 
 uv venv --python 3.10
@@ -14,3 +18,4 @@ cd octotools
 uv pip install -e .
 # set .env 
 ```
+
