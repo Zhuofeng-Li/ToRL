@@ -1,5 +1,5 @@
 ## Summary
-+ It supports math (deepmath) or science (general-reasoner) tasks Python-use LLM RL Training.
++ It supports math (deepmath) and science (general-reasoner) tasks Python-use LLM RL Training.
 + It uses a reward model to compute science tasks' reward during trianing and LLL-as-Judge for GPQA-D evaluation.
 
 ## Env Set Up
